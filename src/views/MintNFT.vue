@@ -1,19 +1,28 @@
 <template>
   <div class="page-wrapper">
     <h1 class="home-page-title">{{ appTitle }}</h1>
-    <img alt="logo-bento" class="logo" src="@/assets/img/bento-starter.svg" />
+    Mint
 
-    <a
-      class="documentation-link"
-      href="/mint"
-      >Mint ergo-names NFT →</a
-    >
-    <br/>
-    <a
-      class="documentation-link"
-      href="/send"
-      >Send to ergo-names NFT owner →</a
-    >
+    <div>
+      <b-form inline>
+        <label class="sr-only" for="inline-form-input-name">Name</label>
+        <b-form-input
+          id="inline-form-input-name"
+          class="mb-2 mr-sm-2 mb-sm-0"
+          placeholder="Jane Doe"
+          ></b-form-input>
+
+          <label class="sr-only" for="inline-form-input-username">Username</label>
+          <b-input-group prepend="@" class="mb-2 mr-sm-2 mb-sm-0">
+            <b-form-input id="inline-form-input-username" placeholder="Username"></b-form-input>
+          </b-input-group>
+
+          <b-form-checkbox class="mb-2 mr-sm-2 mb-sm-0">Remember me</b-form-checkbox>
+
+          <b-button variant="primary">Save</b-button>
+      </b-form>
+    </div>
+
   </div>
 </template>
 
@@ -24,7 +33,7 @@ export default {
   head() {
     return {
       title: {
-        inner: 'Home',
+        inner: 'Mint ergo-names NFT',
       },
       meta: [
         {

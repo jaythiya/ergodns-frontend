@@ -20,12 +20,12 @@ export default class GenericDB {
     const dataToCreate = {
       ...data,
       createTimestamp: serverTimestamp,
-      updateTimestamp: serverTimestamp
+      updateTimestamp: serverTimestamp,
     }
 
     const createPromise = isNil(id)
       ? // Create doc with generated id
-        collectionRef.add(dataToCreate).then(doc => doc.id)
+        collectionRef.add(dataToCreate).then((doc) => doc.id)
       : // Create doc with custom id
         collectionRef
           .doc(id)
@@ -38,7 +38,7 @@ export default class GenericDB {
       id: docId,
       ...data,
       createTimestamp: new Date(),
-      updateTimestamp: new Date()
+      updateTimestamp: new Date(),
     }
   }
 
@@ -69,16 +69,16 @@ export default class GenericDB {
     let query = collectionRef
 
     if (constraints) {
-      constraints.forEach(constraint => {
+      constraints.forEach((constraint) => {
         query = query.where(...constraint)
       })
     }
 
-    const formatResult = result =>
-      result.docs.map(ref =>
+    const formatResult = (result) =>
+      result.docs.map((ref) =>
         this.convertObjectTimestampPropertiesToDate({
           id: ref.id,
-          ...ref.data()
+          ...ref.data(),
         })
       )
 
@@ -94,12 +94,14 @@ export default class GenericDB {
     const clonedData = cloneDeep(data)
     delete clonedData.id
 
-    await (await firestore())
+    await (
+      await firestore()
+    )
       .collection(this.collectionPath)
       .doc(id)
       .update({
         ...clonedData,
-        updateTimestamp: firebase.firestore.FieldValue.serverTimestamp()
+        updateTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
       })
 
     return id
@@ -110,10 +112,7 @@ export default class GenericDB {
    * @param id
    */
   async delete(id) {
-    return (await firestore())
-      .collection(this.collectionPath)
-      .doc(id)
-      .delete()
+    return (await firestore()).collection(this.collectionPath).doc(id).delete()
   }
 
   /**
@@ -124,8 +123,8 @@ export default class GenericDB {
     const newObj = {}
 
     keys(obj)
-      .filter(prop => obj[prop] instanceof Object)
-      .forEach(prop => {
+      .filter((prop) => obj[prop] instanceof Object)
+      .forEach((prop) => {
         if (obj[prop] instanceof firebase.firestore.Timestamp) {
           newObj[prop] = obj[prop].toDate()
         } else {
@@ -135,7 +134,7 @@ export default class GenericDB {
 
     return {
       ...obj,
-      ...newObj
+      ...newObj,
     }
   }
 }

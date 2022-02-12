@@ -22,9 +22,9 @@ describe('app module action', () => {
       const state = {
         SWRegistrationForNewContent: {
           waiting: {
-            postMessage: jest.fn()
-          }
-        }
+            postMessage: jest.fn(),
+          },
+        },
       }
 
       actions.serviceWorkerSkipWaiting({ commit, state })
@@ -37,7 +37,7 @@ describe('app module action', () => {
 
     it('should not set app refreshing status and call sw postMessage with skipWaiting', () => {
       const state = {
-        SWRegistrationForNewContent: null
+        SWRegistrationForNewContent: null,
       }
 
       actions.serviceWorkerSkipWaiting({ commit, state })

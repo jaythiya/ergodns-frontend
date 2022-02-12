@@ -1,8 +1,6 @@
 <template>
   <div class="wrapper">
-    <template v-if="refreshingApp">
-      Loading new content...
-    </template>
+    <template v-if="refreshingApp"> Loading new content... </template>
     <template v-else>
       New content available. Please
       <span class="refresh-btn" @click="$emit('refresh')">REFRESH</span>
@@ -13,8 +11,8 @@
 <script>
 export default {
   props: {
-    refreshingApp: Boolean
-  }
+    refreshingApp: Boolean,
+  },
 }
 </script>
 

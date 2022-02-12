@@ -8,7 +8,7 @@ const config = {
   databaseURL: 'https://bento-starter.firebaseio.com',
   projectId: 'bento-starter',
   storageBucket: 'bento-starter.appspot.com',
-  messagingSenderId: '458464977217'
+  messagingSenderId: '458464977217',
 }
 
 firebase.initializeApp(config)
