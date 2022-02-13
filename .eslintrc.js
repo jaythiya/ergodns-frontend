@@ -4,8 +4,8 @@ module.exports = {
     node: true,
     jest: true,
   },
-  'settings': {
-    'import/extensions': ['.js', '.mjs', '.jsx', '.ts', '.tsx']
+  settings: {
+    'import/extensions': ['.js', '.mjs', '.jsx', '.ts', '.tsx'],
   },
   extends: [
     'airbnb-base',
@@ -26,13 +26,13 @@ module.exports = {
       'error',
       'ignorePackages',
       {
-        'js': 'never',
-        'jsx': 'never',
-        'ts': 'never',
-        'tsx': 'never',
-        'Vue': 'never'
-      }
-   ]
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+        Vue: 'never',
+      },
+    ],
   },
   parserOptions: {
     parser: 'babel-eslint',

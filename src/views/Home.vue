@@ -3,15 +3,9 @@
     <h1 class="home-page-title">{{ appTitle }}</h1>
     <img alt="logo-bento" class="logo" src="@/assets/img/bento-starter.svg" />
 
-    <a
-      class="documentation-link"
-      href="/mint"
-      >Mint ergo-names NFT →</a
-    >
-    <br/>
-    <a
-      class="documentation-link"
-      href="/send"
+    <a class="documentation-link" href="/mint">Mint ergo-names NFT →</a>
+    <br />
+    <a class="documentation-link" href="/send"
       >Send to ergo-names NFT owner →</a
     >
   </div>

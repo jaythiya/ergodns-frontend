@@ -13,20 +13,19 @@
           required
         ></b-form-input>
         <br />
-        <b-button type="submit" variant="primary">Find ergoName NFT Owner</b-button>
+        <b-button type="submit" variant="primary"
+          >Find ergoName NFT Owner</b-button
+        >
       </b-form>
       <p v-if="ergoNameFound">
-          {{form.ergoName}} ErgoName belongs to xyz address. 
-          You can send assets to the NFT owner.
+        {{ form.ergoName }} ErgoName belongs to {{ NFTAddress }} address. You
+        can send assets to the NFT owner.
       </p>
       <p v-if="ergoNameNotFound">
-          Sorry, {{form.ergoName}} ErgoName ID can't be found. 
-          Try searching for something else.
+        Sorry, {{ form.ergoName }} ErgoName ID can't be found. Try searching for
+        something else.
       </p>
 
-      <!-- <b&#45;card class="mt&#45;3" header="Form Data Result"> -->
-      <!--   <pre class="m&#45;0">{{ form }}</pre> -->
-      <!-- </b&#45;card> -->
       <br />
 
       <b-form v-if="ergoNameFound" @submit="sendAsset" @reset="onReset">
@@ -39,20 +38,22 @@
         ></b-form-select>
         <b-form-input
           id="input-3"
-          type="number"
           v-model="form.amount"
+          type="number"
           placeholder="Amount"
           required
         ></b-form-input>
         <b-button type="submit" variant="primary">Send</b-button>
       </b-form>
       <p v-if="assetTransmissionSuccessful">
-          Successfully sent {{form.amount}} {{form.asset}} to the ErgoName ID: {{form.ergoName}}. <br />
-          <a href="/send">NFT Transaction Link</a>
+        Successfully sent {{ form.amount }} {{ form.asset }} to the ErgoName ID:
+        {{ form.ergoName }}. <br />
+        <a href="/send">NFT Transaction Link</a>
       </p>
       <p v-if="assetTransmissionFailure">
-          Oh no, we couldn't process sending the selected assets to {{form.ergoName}}. <br />
-          Please try again later.
+        Oh no, we couldn't process sending the selected assets to
+        {{ form.ergoName }}. <br />
+        Please try again later.
       </p>
     </div>
   </div>
@@ -84,6 +85,7 @@ export default {
         amount: 0,
       },
       assets: [{ text: 'Select One', value: null }, 'Ergo', 'Ada', 'NETA'],
+      NFTAddress: null,
       ergoNameFound: false,
       ergoNameNotFound: false,
       assetTransmissionSuccessful: false,
@@ -94,11 +96,36 @@ export default {
   methods: {
     resolveErgoName(event) {
       event.preventDefault()
-      // eslint-disable-next-line
-      alert(JSON.stringify(this.form))
-      // AJAX Call
-      this.ergoNameFound = true
-      this.ergoNameNotFound = false
+      fetch(
+        `https://testnet-api.ergonames.com/ergonames/resolve/${this.form.ergoName}`
+      )
+        .then(async (response) => {
+          const data = await response.json()
+
+          // check for error response
+          if (!response.ok) {
+            // get error message from body or default to response statusText
+            const error = (data && data.message) || response.statusText
+            return Promise.reject(error)
+          }
+
+          this.NFTAddress = data.ergo
+          if (data.ergo != null) {
+            this.ergoNameFound = true
+            this.ergoNameNotFound = false
+          } else {
+            this.ergoNameFound = false
+            this.ergoNameNotFound = true
+          }
+          return null
+        })
+        .catch((error) => {
+          console.error('There was an error!', error)
+          // eslint-disable-next-line
+          alert('Oops, we encountered an unexpected issue.')
+          this.ergoNameAvailable = false
+          this.ergoNameUnavailable = false
+        })
     },
     sendAsset(event) {
       event.preventDefault()

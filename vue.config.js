@@ -14,6 +14,14 @@ const environmentConfiguration = fs.existsSync(environmentConfigurationPath)
   ? require(environmentConfigurationPath) // eslint-disable-line
   : {}
 
-const config = merge(defaultConfiguration, environmentConfiguration)
+const corsConfiguration = {
+  devServer: { proxy: 'https://testnet-api.ergonames.com/' },
+}
+
+const config = merge(
+  defaultConfiguration,
+  environmentConfiguration,
+  corsConfiguration
+)
 
 module.exports = config

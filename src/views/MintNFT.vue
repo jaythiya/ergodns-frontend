@@ -16,30 +16,27 @@
         <b-button type="submit" variant="primary">Check availability</b-button>
       </b-form>
       <p v-if="ergoNameAvailable">
-          {{form.ergoName}} ErgoName ID is available. 
-          You can claim it by spending 1 Erg.
+        {{ form.ergoName }} ErgoName ID is available. You can claim it by
+        spending 1 Erg.
       </p>
       <p v-if="ergoNameUnavailable">
-          Sorry, {{form.ergoName}} ErgoName ID is not available. 
-          Try searching for something else.
+        Sorry, {{ form.ergoName }} ErgoName ID is not available. Try searching
+        for something else.
       </p>
 
-      <!-- <b&#45;card class="mt&#45;3" header="Form Data Result"> -->
-      <!--   <pre class="m&#45;0">{{ form }}</pre> -->
-      <!-- </b&#45;card> -->
       <br />
 
       <b-form v-if="ergoNameAvailable" @submit="mintNFT" @reset="onReset">
         <b-button type="submit" variant="primary">Mint ErgoName NFT</b-button>
       </b-form>
       <p v-if="ergoMintingSuccessful">
-          Minting of ErgoName {{form.ergoName}} is successful. <br />
-          You will receive the NFT in your wallet in next block. <br />
-          <a href="/mint">NFT Transaction Link</a>
+        Minting of ErgoName {{ form.ergoName }} is successful. <br />
+        You will receive the NFT in your wallet in next block. <br />
+        <a href="/mint">NFT Transaction Link</a>
       </p>
       <p v-if="ergoMintingFailure">
-          Oh no, minting of ErgoName {{form.ergoName}} was unsuccessful. <br />
-          Please try again later.
+        Oh no, minting of ErgoName {{ form.ergoName }} was unsuccessful. <br />
+        Please try again later.
       </p>
     </div>
   </div>
@@ -68,6 +65,7 @@ export default {
       form: {
         ergoName: '',
       },
+      NFTAddress: null,
       ergoNameAvailable: false,
       ergoNameUnavailable: false,
       ergoMintingSuccessful: false,
@@ -78,19 +76,74 @@ export default {
   methods: {
     checkAvailability(event) {
       event.preventDefault()
-      // eslint-disable-next-line
-      alert(JSON.stringify(this.form))
-      // AJAX Call
-      this.ergoNameAvailable = true
-      this.ergoNameUnavailable = false
+
+      fetch(
+        `https://testnet-api.ergonames.com/ergonames/resolve/${this.form.ergoName}`
+      )
+        .then(async (response) => {
+          const data = await response.json()
+
+          // check for error response
+          if (!response.ok) {
+            // get error message from body or default to response statusText
+            const error = (data && data.message) || response.statusText
+            return Promise.reject(error)
+          }
+
+          this.NFTAddress = data.ergo
+          if (data.ergo != null) {
+            this.ergoNameAvailable = false
+            this.ergoNameUnavailable = true
+          } else {
+            this.ergoNameAvailable = true
+            this.ergoNameUnavailable = false
+          }
+          return null
+        })
+        .catch((error) => {
+          console.error('There was an error!', error)
+          // eslint-disable-next-line
+          alert('Oops, we encountered an unexpected issue.')
+          this.ergoNameAvailable = false
+          this.ergoNameUnavailable = false
+        })
     },
     mintNFT(event) {
       event.preventDefault()
-      // eslint-disable-next-line
-      alert(JSON.stringify(this.form))
-      // AJAX Call
-      this.ergoMintingSuccessful = true
-      this.ergoMintingFailure = false
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Basic ${btoa('username:password')}`,
+        },
+        body: JSON.stringify({}),
+      }
+      fetch(
+        `https://localhost/ergonames/reserve/${this.form.ergoName}`,
+        requestOptions
+      )
+        .then(async (response) => {
+          const data = await response.json()
+
+          // check for error response
+          if (!response.ok) {
+            // get error message from body or default to response statusText
+            const error = (data && data.message) || response.statusText
+            console.log(data)
+            // eslint-disable-next-line
+            alert('Sorry, the NFT is already reserved')
+            return Promise.reject(error)
+          }
+
+          // eslint-disable-next-line
+          alert('Successfully reserved NFT')
+          return null
+        })
+        .catch((error) => {
+          console.error('There was an error!', error)
+          // eslint-disable-next-line
+          alert('Oops, we encountered an unexpected issue.')
+        })
     },
     onReset(event) {
       event.preventDefault()
