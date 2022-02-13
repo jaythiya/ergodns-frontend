@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "bento-starter",
+    "default": "ergo-names",
     "mvp": "ergo-names"
   }
 }
