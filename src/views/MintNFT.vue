@@ -17,7 +17,7 @@
       </b-form>
       <p v-if="ergoNameAvailable">
         {{ form.ergoName }} ErgoName ID is available. You can claim it by
-        spending 1 Erg.
+        spending 1 ERG
       </p>
       <p v-if="ergoNameUnavailable">
         Sorry, {{ form.ergoName }} ErgoName ID is not available. Try searching
@@ -38,6 +38,7 @@
         Oh no, minting of ErgoName {{ form.ergoName }} was unsuccessful. <br />
         Please try again later.
       </p>
+      <b>To use the "connect wallet" feature, please install Yoroi Nightly wallet and connect your ERG wallet there.</b>
     </div>
   </div>
 </template>
@@ -113,23 +114,19 @@ export default {
       const requestOptions = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Basic ${btoa('username:password')}`,
+          'Authorization': `Basic ${btoa('ergonames-test:N*b]b-`n$7HehzQ4')}`,
         },
         body: JSON.stringify({}),
       }
       fetch(
-        `https://localhost/ergonames/reserve/${this.form.ergoName}`,
+        `https://testnet-api.ergonames.com/ergonames/reserve/${this.form.ergoName}`,
         requestOptions
       )
         .then(async (response) => {
-          const data = await response.json()
-
           // check for error response
           if (!response.ok) {
             // get error message from body or default to response statusText
-            const error = (data && data.message) || response.statusText
-            console.log(data)
+            const error = response.statusText
             // eslint-disable-next-line
             alert('Sorry, the NFT is already reserved')
             return Promise.reject(error)

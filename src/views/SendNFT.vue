@@ -55,6 +55,7 @@
         {{ form.ergoName }}. <br />
         Please try again later.
       </p>
+      <b>To use the "connect wallet" feature, please install Yoroi Nightly wallet and connect your ERG wallet there.</b>
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <header class="navbar" :class="{ offline: !networkOnLine }">
     <router-link to="/home">
-      <img alt="logo-bento" class="logo" src="@/assets/img/bento-starter.svg" />
+      <img alt="logo-bento" class="logo" src="@/assets/ergoname-dark.png" />
       <span class="site-name title-desktop">{{ appTitle }}</span>
       <span class="site-name title-mobile">{{ appShortTitle }}</span>
     </router-link>
@@ -13,6 +13,14 @@
         <div class="nav-item">
           <router-link to="/send">Send to NFT owner</router-link>
         </div>
+        <div v-if="!walletConnected" class="nav-item" @click="connectWallet">
+          <b-button variant="primary">Connect wallet</b-button>
+        </div>
+        <div v-if="walletConnected" class="nav-item">
+          <b-button disabled variant="success"
+            >{{ walletBalance }} ERG</b-button
+          >
+        </div>
         <div v-if="!networkOnLine" class="nav-item offline-label">Offline</div>
       </nav>
     </div>
@@ -23,10 +31,36 @@
 import { mapGetters, mapState } from 'vuex'
 
 export default {
+  data() {
+    return {
+      walletConnected: false,
+      walletBalance: 0,
+    }
+  },
   computed: {
     ...mapGetters('authentication', ['isUserLoggedIn']),
     ...mapState('authentication', ['user']),
     ...mapState('app', ['networkOnLine', 'appTitle', 'appShortTitle']),
+  },
+  methods: {
+    connectWallet() {
+      // eslint-disable-next-line
+      ergo_request_read_access().then((success) => {
+        if (success) {
+          // eslint-disable-next-line
+          alert('Wallet successfully connected')
+          this.walletConnected = true
+          // eslint-disable-next-line
+          ergo.get_balance().then(function(tokens){
+            this.walletBalance = tokens / 1e9
+          })
+        } else {
+          // eslint-disable-next-line
+          alert('Wallet connection failed')
+          this.walletConnected = false
+        }
+      })
+    },
   },
 }
 </script>

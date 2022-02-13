@@ -1,13 +1,18 @@
 <template>
   <div class="page-wrapper">
-    <h1 class="home-page-title">{{ appTitle }}</h1>
-    <img alt="logo-bento" class="logo" src="@/assets/img/bento-starter.svg" />
+    <img alt="logo-ergonames" width="500" class="logo" src="@/assets/ergoname-light.png" />
 
-    <a class="documentation-link" href="/mint">Mint ergo-names NFT →</a>
+    <router-link to="/mint">
+      <b-button pill variant="primary">Mint ergo-names NFT →</b-button>
+    </router-link>
     <br />
-    <a class="documentation-link" href="/send"
-      >Send to ergo-names NFT owner →</a
-    >
+    <router-link to="/send">
+      <b-button pill variant="primary">Send to ergo-names NFT owner →</b-button>
+    </router-link>
+    <br />
+    <div>
+      <b>To use the "connect wallet" feature, please install Yoroi Nightly wallet and connect your ERG wallet there.</b>
+    </div>
   </div>
 </template>
 
