@@ -1,28 +1,47 @@
 <template>
   <div class="page-wrapper">
     <h1 class="home-page-title">{{ appTitle }}</h1>
-    Mint
+    <h3>Mint your ergo-names NFT</h3>
 
+    <br />
     <div>
-      <b-form inline>
-        <label class="sr-only" for="inline-form-input-name">Name</label>
+      <b-form @submit="checkAvailability" @reset="onReset">
         <b-form-input
-          id="inline-form-input-name"
-          class="mb-2 mr-sm-2 mb-sm-0"
-          placeholder="Jane Doe"
-          ></b-form-input>
-
-          <label class="sr-only" for="inline-form-input-username">Username</label>
-          <b-input-group prepend="@" class="mb-2 mr-sm-2 mb-sm-0">
-            <b-form-input id="inline-form-input-username" placeholder="Username"></b-form-input>
-          </b-input-group>
-
-          <b-form-checkbox class="mb-2 mr-sm-2 mb-sm-0">Remember me</b-form-checkbox>
-
-          <b-button variant="primary">Save</b-button>
+          id="input-1"
+          v-model="form.ergoName"
+          placeholder="Enter ErgoName ID to check availability"
+          required
+        ></b-form-input>
+        <br />
+        <b-button type="submit" variant="primary">Check availability</b-button>
       </b-form>
-    </div>
+      <p v-if="ergoNameAvailable">
+          {{form.ergoName}} ErgoName ID is available. 
+          You can claim it by spending 1 Erg.
+      </p>
+      <p v-if="ergoNameUnavailable">
+          Sorry, {{form.ergoName}} ErgoName ID is not available. 
+          Try searching for something else.
+      </p>
 
+      <!-- <b&#45;card class="mt&#45;3" header="Form Data Result"> -->
+      <!--   <pre class="m&#45;0">{{ form }}</pre> -->
+      <!-- </b&#45;card> -->
+      <br />
+
+      <b-form v-if="ergoNameAvailable" @submit="mintNFT" @reset="onReset">
+        <b-button type="submit" variant="primary">Mint ErgoName NFT</b-button>
+      </b-form>
+      <p v-if="ergoMintingSuccessful">
+          Minting of ErgoName {{form.ergoName}} is successful. <br />
+          You will receive the NFT in your wallet in next block. <br />
+          <a href="/mint">NFT Transaction Link</a>
+      </p>
+      <p v-if="ergoMintingFailure">
+          Oh no, minting of ErgoName {{form.ergoName}} was unsuccessful. <br />
+          Please try again later.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -44,7 +63,53 @@ export default {
       ],
     }
   },
+  data() {
+    return {
+      form: {
+        ergoName: '',
+      },
+      ergoNameAvailable: false,
+      ergoNameUnavailable: false,
+      ergoMintingSuccessful: false,
+      ergoMintingFailure: false,
+    }
+  },
   computed: mapState('app', ['appTitle']),
+  methods: {
+    checkAvailability(event) {
+      event.preventDefault()
+      // eslint-disable-next-line
+      alert(JSON.stringify(this.form))
+      // AJAX Call
+      this.ergoNameAvailable = true
+      this.ergoNameUnavailable = false
+    },
+    mintNFT(event) {
+      event.preventDefault()
+      // eslint-disable-next-line
+      alert(JSON.stringify(this.form))
+      // AJAX Call
+      this.ergoMintingSuccessful = true
+      this.ergoMintingFailure = false
+    },
+    onReset(event) {
+      event.preventDefault()
+      // Reset our form values
+      this.form.ergoName = ''
+      // Trick to reset/clear native browser form validation state
+      this.ergoNameAvailable = false
+      this.ergoNameUnavailable = false
+      this.ergoMintingSuccessful = false
+      this.ergoMintingFailure = false
+      // TODO: fixme
+      this.$nextTick(() => {
+        this.ergoNameAvailable = false
+        this.ergoNameUnavailable = false
+        this.ergoMintingSuccessful = false
+        this.ergoMintingFailure = false
+      })
+    },
+  },
 }
 </script>
 
