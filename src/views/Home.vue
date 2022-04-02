@@ -1,6 +1,11 @@
 <template>
   <div class="page-wrapper">
-    <img alt="logo-ergonames" width="500" class="logo" src="@/assets/ergoname-light.png" />
+    <img
+      alt="logo-ergonames"
+      width="500"
+      class="logo"
+      src="@/assets/ergoname-light.png"
+    />
 
     <router-link to="/mint">
       <b-button pill variant="primary">Mint ergo-names NFT →</b-button>
@@ -11,7 +16,10 @@
     </router-link>
     <br />
     <div>
-      <b>To use the "connect wallet" feature, please install Yoroi Nightly wallet and connect your ERG wallet there.</b>
+      <b
+        >To use the "connect wallet" feature, please install Yoroi Nightly
+        wallet and connect your ERG wallet there.</b
+      >
     </div>
   </div>
 </template>
